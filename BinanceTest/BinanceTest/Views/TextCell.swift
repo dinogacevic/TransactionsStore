@@ -27,9 +27,7 @@ class TextCell: UITableViewCell {
     }
     
     private lazy var valueLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        return label
+        return UILabel()
     }()
     
     private func setupSubiews() {

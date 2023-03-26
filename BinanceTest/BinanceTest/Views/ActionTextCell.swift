@@ -38,28 +38,21 @@ class ActionTextCell: UITableViewCell {
     
     private lazy var insertLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
         label.text = ">"
         return label
     }()
     
     private lazy var actionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        return label
+        return UILabel()
     }()
     
     private lazy var keyLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        return label
+        return UILabel()
     }()
     
     
     private lazy var valueLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        return label
+        return UILabel()
     }()
     
     private lazy var spacer: UIView = {
