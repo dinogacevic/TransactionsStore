@@ -275,30 +275,30 @@ class MainViewController: UIViewController, UIActionSheetDelegate, Transactionab
     }
     
     private func onCommitTapped() {
-        guard openCommit else {
+        let commitResult = commit()
+        switch commitResult {
+        case .success:
             dataSource?.tableViewData.append(ActionTextCellViewModel(action: .commit, key: nil, value: nil))
-            dataSource?.tableViewData.append(TextCellViewModel(value: "no transactions"))
-            tableView.reloadData()
-            return
+            
+        case .failure(let error):
+            dataSource?.tableViewData.append(ActionTextCellViewModel(action: .commit, key: nil, value: nil))
+            dataSource?.tableViewData.append(TextCellViewModel(value: error.description))
         }
         
-        commit()
-        
-        dataSource?.tableViewData.append(ActionTextCellViewModel(action: .commit, key: nil, value: nil))
         tableView.reloadData()
     }
     
     private func onRollbackTapped() {
-        guard openCommit, let dataSource else {
+        let rollbackResult = rollback()
+        switch rollbackResult {
+        case .success:
             dataSource?.tableViewData.append(ActionTextCellViewModel(action: .rollback, key: nil, value: nil))
-            dataSource?.tableViewData.append(TextCellViewModel(value: "no transactions"))
-            tableView.reloadData()
-            return
+            
+        case .failure(let error):
+            dataSource?.tableViewData.append(ActionTextCellViewModel(action: .rollback, key: nil, value: nil))
+            dataSource?.tableViewData.append(TextCellViewModel(value: error.description))
         }
         
-        rollback()
-        
-        dataSource.tableViewData.append(ActionTextCellViewModel(action: .rollback, key: nil, value: nil))
         tableView.reloadData()
     }
     

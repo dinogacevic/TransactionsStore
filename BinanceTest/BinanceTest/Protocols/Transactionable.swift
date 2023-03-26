@@ -24,8 +24,8 @@ protocol Transactionable: AnyObject {
     func delete(key: String)
     func count(value: String) -> Int
     func begin()
-    func commit()
-    func rollback()
+    func commit() -> Result<Void?, ActionError>
+    func rollback() -> Result<Void?, ActionError>
 }
 
 extension Transactionable where Self: UIViewController {
@@ -78,7 +78,9 @@ extension Transactionable where Self: UIViewController {
         }
     }
     
-    func commit() {
+    func commit() -> Result<Void?, ActionError> {
+        guard openCommit else { return .failure(.init(description: "no transactions"))}
+        
         let transactionIndex = tempTransactions.endIndex - 1
         if transactionIndex > 0 {
             tempTransactions[transactionIndex - 1] = tempTransactions[transactionIndex]
@@ -87,9 +89,13 @@ extension Transactionable where Self: UIViewController {
         }
         
         tempTransactions.removeLast()
+        return .success(nil)
     }
     
-    func rollback() {
+    func rollback() -> Result<Void?, ActionError> {
+        guard openCommit else { return .failure(.init(description: "no transactions"))}
+        
         tempTransactions.removeLast()
+        return .success(nil)
     }
 }
