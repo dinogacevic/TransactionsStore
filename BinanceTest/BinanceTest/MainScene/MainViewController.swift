@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-class MainViewController: UIViewController, UIActionSheetDelegate, Transactionable {
+class MainViewController: UIViewController, UIActionSheetDelegate, Transactionable, UITextFieldDelegate {
     
     private var observers: [AnyCancellable] = []
     var dataSource: MainDataSource?
@@ -91,6 +91,8 @@ class MainViewController: UIViewController, UIActionSheetDelegate, Transactionab
     private lazy var keyTextField: DGTextField = {
         let textField = DGTextField()
         textField.textFieldType = .key
+        textField.returnKeyType = .done
+        textField.delegate = self
         textField.textFieldPublisher.sink { [weak self] response in
             self?.handleTextFieldResponse(response: response)
         }.store(in: &observers)
@@ -100,6 +102,8 @@ class MainViewController: UIViewController, UIActionSheetDelegate, Transactionab
     private lazy var valueTextField: DGTextField = {
         let textField = DGTextField()
         textField.textFieldType = .value
+        textField.returnKeyType = .done
+        textField.delegate = self
         textField.textFieldPublisher.sink { [weak self] response in
             self?.handleTextFieldResponse(response: response)
         }.store(in: &observers)
@@ -307,5 +311,10 @@ class MainViewController: UIViewController, UIActionSheetDelegate, Transactionab
         dataSource?.currentValue = nil
         keyTextField.text = nil
         valueTextField.text = nil
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
